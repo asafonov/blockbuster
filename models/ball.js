@@ -5,7 +5,15 @@ class Ball {
     this.direction = Math.random() > 0.5 ? Ball.DIRECTION_UPRIGHT : Ball.DIRECTION_UPLEFT;
     this.angle = Math.random() > 0.5 ? 1 : 1/2;
     this.speed = asafonov.settings.ballSpeed;
+    this.resume();
+  }
+
+  resume() {
     this.interval = setInterval(this.move.bind(this), 50);
+  }
+
+  pause() {
+    clearInterval(this.interval);
   }
 
   moveByDelta (delta) {
@@ -46,7 +54,7 @@ class Ball {
   }
 
   destroy() {
-    clearInterval(this.interval);
+    this.pause();
     console.log("Ball destroy");
   }
 }

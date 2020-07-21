@@ -7,6 +7,8 @@ class Field {
     this.objectsCount = 0;
     this.hero = null;
     this.ball = null;
+    this.heroMoveInterval;
+    this.isPaused = false;
     asafonov.messageBus.subscribe(asafonov.events.FIELD_HERO_MOVED, this, 'onHeroMoved');
     asafonov.messageBus.subscribe(asafonov.events.BALL_MOVED, this, 'onBallMoved');
   }
@@ -167,7 +169,33 @@ class Field {
     }
   }
 
+  playPause() {
+    this[this.isPaused ? 'resume' : 'pause']();
+    this.isPaused = ! this.isPaused;
+  }
+
+  startHeroMoving (direction) {
+    if (this.heroMoveInterval) {
+      clearInterval(this.heroMoveInterval);
+    }
+
+    const hero = this.hero;
+    this.heroMoveInterval = setInterval(function() {hero[direction]();}, 60);
+  }
+
+  resume() {
+    this.ball.resume();
+  }
+
+  pause() {
+    if (this.heroMoveInterval) {
+      clearInterval(this.heroMoveInterval);
+    }
+    this.ball.pause();
+  }
+
   destroy() {
+    this.pause();
     this.hero.destroy();
     this.hero  = null;
     this.ball.destroy();

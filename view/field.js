@@ -8,7 +8,6 @@ class FieldView {
     this.field;
     this.element;
     this.alertElement;
-    this.heroMoveInterval;
     this.onKeyDownProxy = this.onKeyDown.bind(this);
     this.onTouchProxy = this.onTouch.bind(this);
     this.hideAlertProxy = this.hideAlert.bind(this);
@@ -135,9 +134,11 @@ class FieldView {
 
   onKeyDown (e) {
     if (e.keyCode == 37) {
-      this.startHeroMoving('moveLeft');
+      this.field.startHeroMoving('moveLeft');
     } else if (e.keyCode == 39) {
-      this.startHeroMoving('moveRight');
+      this.field.startHeroMoving('moveRight');
+    } else if (e.keyCode == 32) {
+      this.field.playPause();
     }
   }
 
@@ -145,27 +146,16 @@ class FieldView {
     e.preventDefault();
     var x = e.touches[e.touches.length - 1].clientX;
 
-    if (x < this.element.offsetWidth / 2) {
-      this.startHeroMoving('moveLeft');
+    if (x < this.element.offsetWidth / 3) {
+      this.field.startHeroMoving('moveLeft');
+    } else if (x > 2 * this.element.offsetWidth / 3) {
+      this.field.startHeroMoving('moveRight');
     } else {
-      this.startHeroMoving('moveRight');
+      this.field.playPause();
     }
-  }
-
-  startHeroMoving (direction) {
-    if (this.heroMoveInterval) {
-      clearInterval(this.heroMoveInterval);
-    }
-
-    var hero = this.field.getHero();
-    this.heroMoveInterval = setInterval(function() {hero[direction]();}, 60);
   }
 
   destroy() {
-    if (this.heroMoveInterval) {
-      clearInterval(this.heroMoveInterval);
-    }
-
     this.heroView.destroy();
     this.ballView.destroy();
     this.field.destroy();
