@@ -4,6 +4,8 @@ class Score {
     this.hero = hero;
     this.ball = ball;
     this.scores = 0;
+    this.totalGames = window.localStorage.getItem('totalGames') || 0;
+    this.wonGames = window.localStorage.getItem('wonGames') || 0;
     this.highscore = this.getHighScore();
     this.highscoreReported = false;
     asafonov.messageBus.subscribe(asafonov.events.OBJECT_COLLISION, this, 'onObjectCollision');
@@ -25,6 +27,7 @@ class Score {
   }
 
   processGameWon() {
+    this.wonGames++;
     this.scores *= 2;
     asafonov.messageBus.send(asafonov.events.SCORES_UPDATED, {scores: this.scores});
   }
@@ -32,6 +35,13 @@ class Score {
   isNewHighScore() {
     return this.scores > this.highscore;
   }
+
+  updateGameStats() {
+    this.totalGames++;
+    window.localStorage.setItem('totalGames', this.totalGames);
+    window.localStorage.setItem('wonGames', this.wonGames);
+  }
+
 }
 
 Score.BASE_SCORE = 8;

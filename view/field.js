@@ -59,11 +59,13 @@ class FieldView {
   }
 
   gameOver (msg) {
+    asafonov.score.updateGameStats();
     document.querySelector('#gameover').style.display = 'block';
     document.querySelector('#gameover .status').innerHTML = msg || 'Game Over';
     document.querySelector('#gameover button').focus();
     const isNewHighScore = asafonov.score.isNewHighScore();
     document.querySelector('#gameover #highscore').style.display = isNewHighScore ? 'block' : 'none';
+    document.querySelector('#gameover #stats').innerHTML = 'Games won: ' + asafonov.score.wonGames + '/' + asafonov.score.totalGames;
     isNewHighScore && asafonov.score.updateHighScore() && (document.querySelector('#highscore span').innerHTML = asafonov.score.scores);
     this.destroy();
   }
