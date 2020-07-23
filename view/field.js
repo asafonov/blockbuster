@@ -7,6 +7,7 @@ class FieldView {
     this.itemHeight;
     this.field;
     this.element;
+    this.pauseOverlay;
     this.alertElement;
     this.onKeyDownProxy = this.onKeyDown.bind(this);
     this.onTouchProxy = this.onTouch.bind(this);
@@ -36,6 +37,7 @@ class FieldView {
 
   initView() {
     this.element = document.getElementById('field');
+    this.pauseOverlay = document.getElementById('pause');
     this.heroView = new HeroView();
     this.initSize();
   }
@@ -139,6 +141,7 @@ class FieldView {
       this.field.startHeroMoving('moveRight');
     } else if (e.keyCode == 32) {
       this.field.playPause();
+      this.pauseOverlay.style.display = this.field.isPaused ? 'block' : 'none'
     }
   }
 
