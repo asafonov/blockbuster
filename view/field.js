@@ -134,6 +134,10 @@ class FieldView {
     asafonov.settings.sfx && this.bonusSound.play();
   }
 
+  togglePauseOverlay() {
+    this.pauseOverlay.style.display = this.field.isPaused ? 'block' : 'none'
+  }
+
   onKeyDown (e) {
     if (e.keyCode == 37) {
       this.field.startHeroMoving('moveLeft');
@@ -141,7 +145,7 @@ class FieldView {
       this.field.startHeroMoving('moveRight');
     } else if (e.keyCode == 32) {
       this.field.playPause();
-      this.pauseOverlay.style.display = this.field.isPaused ? 'block' : 'none'
+      this.togglePauseOverlay();
     }
   }
 
@@ -155,6 +159,7 @@ class FieldView {
       this.field.startHeroMoving('moveRight');
     } else {
       this.field.playPause();
+      this.togglePauseOverlay();
     }
   }
 
