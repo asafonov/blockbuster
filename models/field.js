@@ -9,6 +9,8 @@ class Field {
     this.ball = null;
     this.heroMoveInterval;
     this.isPaused = false;
+    this.directions = ['moveLeft', 'moveRight']
+    this.currentDirection = -1
     asafonov.messageBus.subscribe(asafonov.events.FIELD_HERO_MOVED, this, 'onHeroMoved');
     asafonov.messageBus.subscribe(asafonov.events.BALL_MOVED, this, 'onBallMoved');
   }
@@ -175,6 +177,13 @@ class Field {
   }
 
   startHeroMoving (direction) {
+    if (this.currentDirection === -1) {
+      this.currentDirection = this.directions.indexOf(direction)
+    } else {
+      this.currentDirection = 1 - this.currentDirection
+      direction = this.directions[this.currentDirection]
+    }
+
     if (this.heroMoveInterval) {
       clearInterval(this.heroMoveInterval);
     }
@@ -208,6 +217,8 @@ class Field {
     }
 
     this.objects.length = 0;
+    this.directions = null
+    this.currentDirection = null
     console.log("Field destroy");
   }
 }
